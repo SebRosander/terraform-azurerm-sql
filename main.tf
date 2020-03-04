@@ -30,7 +30,7 @@ resource "azurerm_sql_server" "primary" {
 resource "azurerm_sql_server" "secondary" {
   count                        = var.failover == true ? 1 : 0
   name                         = ${var.sql_server_name}${"-secondary"}
-  location                     = azurerm_resource_group.rg.location
+  location                     = var.sql_server_secondary_location
   resource_group_name          = azurerm_resource_group.rg.name
   version                      = var.sqlversion
   administrator_login          = random_uuid.username.result

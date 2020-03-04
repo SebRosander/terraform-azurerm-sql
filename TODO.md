@@ -7,3 +7,4 @@
 * Names 
 * Create tests
 * Run tests
+* Remake README 
