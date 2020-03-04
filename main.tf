@@ -1,20 +1,18 @@
-resource "azurerm_resource_group" "rg" {
-  name     = ""
-  location = var.location
-  tags                         = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"} /*var.tag*/)
-}
-
+resource "random_uuid" "username" {}
 resource "random_password" "password" {
   length = 32
   special = true
   override_special = "_%@"
 }
 
-resource "random_uuid" "username" {}
+resource "azurerm_resource_group" "rg" {
+  name     = var.rg_name
+  location = var.rg_location
+  tags                         = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"} var.rg_tags)
+}
 
-# create a variable for tags. Remember to assign created by 
-resource "azurerm_sql_server" "sqlserver" {
-  name                         = local.namebase
+resource "azurerm_sql_server" "primary" {
+  name                         = ${var.sql_server_name}${"-primary"}
   location                     = azurerm_resource_group.rg.location
   resource_group_name          = azurerm_resource_group.rg.name
   version                      = var.sqlversion
@@ -26,13 +24,30 @@ resource "azurerm_sql_server" "sqlserver" {
       type                     = "SystemAssigned"
     }
   }
-  tags                         = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"} /*var.tag*/)
+  tags                         = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"} var.sql_server_tags)
+}
+
+resource "azurerm_sql_server" "secondary" {
+  count                        = var.failover == true ? 1 : 0
+  name                         = ${var.sql_server_name}${"-secondary"}
+  location                     = azurerm_resource_group.rg.location
+  resource_group_name          = azurerm_resource_group.rg.name
+  version                      = var.sqlversion
+  administrator_login          = random_uuid.username.result
+  administrator_login_password = random_password.password.result
+  dynamic "identity" {
+    for_each                   = var.identity == true ? [1] : [0] 
+    content                    {
+      type                     = "SystemAssigned"
+    }
+  }
+  tags                         = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"} var.sql_server_tags)
 }
 
 #Create a variable for email_addresses 
 resource "azurerm_mssql_server_security_alert_policy" "sap" {
-  resource_group_name          = azurerm_resource_group.rg.name
-  server_name                = azurerm_sql_server.sqlserver.name
+  resource_group_name        = azurerm_resource_group.rg.name
+  server_name                = azurerm_sql_server.primary.name
   state                      = "Enabled"
   disabled_alerts            = var.disabled_alerts
   email_account_admins       = true
@@ -58,7 +73,7 @@ resource "azurerm_mssql_server_vulnerability_assessment" "va" {
 resource "azurerm_sql_virtual_network_rule" "sqlvnetrule" {
   name                = ""
   resource_group_name = azurerm_resource_group.rg.name
-  server_name         = azurerm_sql_server.sqlserver.name
+  server_name         = azurerm_sql_server.primary.name
   subnet_id           = ""
 }
 
@@ -67,7 +82,7 @@ resource "azurerm_sql_database" "sql" {
   name                              = ""
   location                          = azurerm_resource_group.rg.location
   resource_group_name               = azurerm_resource_group.rg.name
-  server_name                       = azurerm_sql_server.sqlserver.name
+  server_name                       = azurerm_sql_server.primary.name
   create_mode                       = var.create_mode
   source_database_id                = var.source_database_id == null ? null : var.source_database_id
   restore_point_in_time             = var.source_database_id == null ? null : var.restore_point_in_time == null ? null : var.restore_point_in_time

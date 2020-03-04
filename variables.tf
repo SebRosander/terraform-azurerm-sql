@@ -1,8 +1,25 @@
-# Generic Module Variables
-variable "identity" {
-  description = "If you want your SQL Server to have an managed identity. Defaults to false."
-  type = bool
-  default = false  
+# azurerm_resource_group.rg variables
+variable "rg_name" {
+  description = "The name of the resource group. Must be unique on your Azure subscription." 
+  type = string
+}
+
+variable "rg_location" {
+  description = 
+  type = string
+  default = "westeurope"
+}
+
+variable "rg_tag" {
+  description = "A mapping of tags to assign to the resource."
+  type = map(string)
+  default = {}
+}
+
+# azurerm_sql_server.primary variables
+variable "sql_server_name" {
+  description = "The name of the SQL Server. This needs to be globally unique within Azure."
+  type = string
 }
 
 variable "sqlversion" {
@@ -10,6 +27,37 @@ variable "sqlversion" {
   type = string 
   default = "12.0"
 }
+
+variable "identity" {
+  description = "If you want your SQL Server to have an managed identity. Defaults to false."
+  type = bool
+  default = false  
+}
+
+variable "sql_server_tags" {
+  description = "A mapping of tags to assign to the resource."
+  type = map(string)
+  default = {}
+}
+
+# azurerm_sql_server.secondary
+variable "sql_server_secondary_location" {
+  description = "Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created."
+  type = string
+  default = "northeurope"
+}
+
+
+
+# Generic Module Variables
+variable "failover" {
+  description = "Do you want to create a failover for your Azure SQL server?"
+  type = bool
+  default = false
+}
+
+
+
 
 variable "source_database_id" {
   description = "The URI of the source database if create_mode value is not Default."
