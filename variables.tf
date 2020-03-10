@@ -4,7 +4,7 @@ variable "rg_name" {
   type = string
 }
 variable "rg_location" {
-  description = 
+  description = "The location where the resource group should be created."
   type = string
   default = "westeurope"
 }
