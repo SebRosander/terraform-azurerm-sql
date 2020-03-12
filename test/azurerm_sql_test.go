@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/retry"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
@@ -12,10 +13,20 @@ import (
 func TestSQLbasic(t *testing.T) {
 	t.Parallel()
 
+	rg_name := random.UniqueId()
+	sql_server_name := random.UniqueId()
+	sql_database_name := random.UniqueId()
+	storage_account_name := random.UniqueId()
+
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../test/basic_sql",
 
-		Vars: map[string]interface{}{},
+		Vars: map[string]interface{}{
+			"rg_name":              rg_name,
+			"sql_server_name":      sql_server_name,
+			"sql_database_name":    sql_database_name,
+			"storage_account_name": storage_account_name,
+		},
 	}
 
 	defer terraform.Destroy(t, terraformOptions)
@@ -29,11 +40,10 @@ func TestSQLbasic(t *testing.T) {
 	dbConfig.database = terraform.Output(t, terraformOptions, "db_name")
 
 	maxRetries := 15
-	maxRetries := 15
 	timeBetweenRetries := 5 * time.Second
 	description := fmt.Sprintf("Executing commands on database %s", dbConfig.server)
 
-	retry.DoWithRetry(t, description, maxRetries, timeBetweenRetries, func() (string, error){
+	retry.DoWithRetry(t, description, maxRetries, timeBetweenRetries, func() (string, error) {
 		defer db.Close()
 		db, err := DBConnectionE(t, "mssql", dbConfig)
 		if err != nil {
@@ -60,7 +70,7 @@ func TestSQLbasic(t *testing.T) {
 		fmt.Println("Executed SQL commands correctly")
 
 		return "", nil
-	}
+	})
 }
 
 /* func TestSQLadvanced(t *testing.T) {

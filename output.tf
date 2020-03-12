@@ -6,29 +6,30 @@ output "sql_rg_location" {
   value = azurerm_resource_group.rg.location
 }
 
-# SQL Server Outputs
+# Primary SQL Server Outputs
 output "sql_name" {
-  value = azurerm_sql_server.sqlserver.name
+  value = azurerm_sql_server.primary.name
 }
 output "sql_fully_qualified_domain_name" {
-  value = var.identity == true ? azurerm_sql_server.sqlserver.fully_qualified_domain_name : null
+  value = var.identity == true ? azurerm_sql_server.primary.fully_qualified_domain_name : null
 }
 output "sql_identity" {
-  value = var.identity == true ? azurerm_sql_server.sqlserver.identity : null
+  value = var.identity == true ? azurerm_sql_server.primary.identity : null
 }
 output "sql_default_secondary_location" {
   value = azurerm_sql_database.sql.default_secondary_location
 }
 output "sql_admin_username"{
-  value       = azurerm_sql_server.sqlserver.administrator_login
+  value       = azurerm_sql_server.primary.administrator_login
   sensitive   = true
 }
 output "sql_password" {
-  value       = azurerm_sql_server.sqlserver.administrator_login_password
+  value       = azurerm_sql_server.primary.administrator_login_password
   sensitive   = true
 }
 output "sql_connection_string" {
-  value = "Server=tcp:${azurerm_sql_server.sqlserver.fully_qualified_domain_name},1433;Initial Catalog=${azurerm_sql_database.sql.name};Persist Security Info=False;User ID=${azurerm_sql_server.sqlserver.administrator_login};Password=${azurerm_sql_server.sqlserver.administrator_login_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  value = "Server=tcp:${azurerm_sql_server.primary.fully_qualified_domain_name},1433;Initial Catalog=${azurerm_sql_database.sql.name};Persist Security Info=False;User ID=${azurerm_sql_server.primary.administrator_login};Password=${azurerm_sql_server.primary.administrator_login_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  sensitive = true
 }
 
 # SQL Database Outputs

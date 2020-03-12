@@ -1,5 +1,6 @@
 data "azurerm_client_config" "current" {}
 data "azuread_group" "sql_admin" {
+  count = var.ada == true ? 1 : 0
   name = var.ada_login
 }
 resource "random_uuid" "username" {}
@@ -54,16 +55,16 @@ resource "azurerm_sql_active_directory_administrator" "ada_primary" {
   resource_group_name = azurerm_resource_group.rg.name
   login               = var.ada_login
   tenant_id           = data.azurerm_client_config.current.tenant_id
-  object_id           = data.azuread.sql_admin.id
+  object_id           = data.azuread_group.sql_admin[0].id
 }
 
 resource "azurerm_sql_active_directory_administrator" "ada_secondary" {
   count               = var.failover == true ? var.ada == true ? 1 : 0 : 0
-  server_name         = azurerm_sql_server.secondary.name
+  server_name         = azurerm_sql_server.secondary[count.index].name
   resource_group_name = azurerm_resource_group.rg.name
   login               = var.ada_login
   tenant_id           = data.azurerm_client_config.current.tenant_id
-  object_id           = data.azuread.sql_admin.id
+  object_id           = data.azuread_group.sql_admin[0].id
 }
 
 resource "azurerm_mssql_server_security_alert_policy" "sap" {
@@ -98,10 +99,10 @@ resource "azurerm_sql_virtual_network_rule" "sql_vnet_rule_primary" {
   subnet_id           = var.subnet_id_primary
 }
 resource "azurerm_sql_virtual_network_rule" "sql_vnet_rule_secondary" {
-  count               = var.vnet_enable == true ? var.failover == true ? 1 : 0 : 0
+  count               = var.vnet_enabled == true ? var.failover == true ? 1 : 0 : 0
   name                = var.sql_vnet_rule_secondary_name
   resource_group_name = azurerm_resource_group.rg.name
-  server_name         = azurerm_sql_server.secondary.name
+  server_name         = azurerm_sql_server.secondary[count.index].name
   subnet_id           = var.subnet_id_secondary
 }
 
@@ -133,7 +134,7 @@ resource "azurerm_sql_database" "sql" {
 }
 
 resource "azurerm_storage_account" "sa" {
-  name                              = lower(substr("${var.sql_server_name}-logs", 0, min(length("${var.sql_server_name}-logs"),23)))
+  name                              = lower(substr("${var.storage_account_name}", 0, min(length("${var.sql_server_name}-logs"),23)))
   location                          = azurerm_resource_group.rg.location
   resource_group_name               = azurerm_resource_group.rg.name
   account_kind                      = "StorageV2"
@@ -144,7 +145,7 @@ resource "azurerm_storage_account" "sa" {
 }
 
 resource "azurerm_storage_container" "sc" {
-  name                      = "azurerm_mssql_server_vulnerability_assessment"
+  name                      = "vulnerability-assessment"
   storage_account_name      = azurerm_storage_account.sa.name
   container_access_type     = "private"
 }

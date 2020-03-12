@@ -8,7 +8,7 @@ variable "rg_location" {
   type = string
   default = "westeurope"
 }
-variable "rg_tag" {
+variable "rg_tags" {
   description = "A mapping of tags to assign to the resource."
   type = map(string)
   default = {}
@@ -163,6 +163,10 @@ variable "use_server_default" {
 }
 
 # azurerm_storage_account.sa
+variable "storage_account_name" {
+  description = "Specifies the name of the storage account to hold logs"
+  type = string
+}
 variable "account_replication_type" {
   description = "Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS and ZRS."
   type = string
