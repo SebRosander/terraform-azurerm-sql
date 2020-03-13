@@ -1,7 +1,7 @@
 data "azurerm_client_config" "current" {}
 data "azuread_group" "sql_admin" {
-  count = var.ada == true ? 1 : 0
-  name = var.ada_login
+  count     = var.ada == true ? 1 : 0
+  name      = var.ada_login
 }
 resource "random_uuid" "username" {}
 resource "random_password" "password" {
@@ -60,7 +60,7 @@ resource "azurerm_sql_active_directory_administrator" "ada_primary" {
 
 resource "azurerm_sql_active_directory_administrator" "ada_secondary" {
   count               = var.failover == true ? var.ada == true ? 1 : 0 : 0
-  server_name         = azurerm_sql_server.secondary[count.index].name
+  server_name         = azurerm_sql_server.secondary[0].name
   resource_group_name = azurerm_resource_group.rg.name
   login               = var.ada_login
   tenant_id           = data.azurerm_client_config.current.tenant_id

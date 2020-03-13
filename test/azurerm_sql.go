@@ -15,6 +15,7 @@ type DBConfig struct {
 	user     string
 	password string
 	database string
+	port     int
 }
 
 // DBConnection connects to the database using database configuration and database type, i.e. mssql, and then return the database. If there's any error, fail the test.
@@ -28,7 +29,7 @@ func DBConnection(t *testing.T, dbType string, dbConfig DBConfig) *sql.DB {
 
 // DBConnectionE connects to the database using database configuration and database type, i.e. mssql. Return the database or an error.
 func DBConnectionE(t *testing.T, dbType string, dbConfig DBConfig) (*sql.DB, error) {
-	config := fmt.Sprintf("server = %s; user id = %s; password = %s; database = %s", dbConfig.server, dbConfig.user, dbConfig.password, dbConfig.database)
+	config := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;", dbConfig.server, dbConfig.user, dbConfig.password, dbConfig.port, dbConfig.database)
 	db, err := sql.Open(dbType, config)
 	if err != nil {
 		return nil, err

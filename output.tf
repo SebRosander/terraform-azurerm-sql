@@ -11,7 +11,7 @@ output "sql_name" {
   value = azurerm_sql_server.primary.name
 }
 output "sql_fully_qualified_domain_name" {
-  value = var.identity == true ? azurerm_sql_server.primary.fully_qualified_domain_name : null
+  value = azurerm_sql_server.primary.fully_qualified_domain_name
 }
 output "sql_identity" {
   value = var.identity == true ? azurerm_sql_server.primary.identity : null
