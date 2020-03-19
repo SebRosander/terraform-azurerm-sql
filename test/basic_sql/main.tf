@@ -1,23 +1,18 @@
-module "SQL" {
-  source = "../../"
-  rg_name               = "qazwsxedcrfv"
-  sql_server_name       = "qazwsxedcrfv"
-  sql_database_name     = "qazwsxedcrfv"
-  storage_account_name  = "qazwsxedcrfv"
-  #module specific parameters
-  edition                          = "Basic"
-}
-
 data "http" "example" {
   url = "https://api.ipify.org"
 }
-
-resource "azurerm_sql_firewall_rule" "client" {
-  name                = "client"
-  resource_group_name = module.SQL.sql_rg_name
-  server_name         = module.SQL.sql_name
-  start_ip_address    = data.http.example.body
-  end_ip_address      = data.http.example.body
+module "SQL" {
+  source = "../../"
+  rg_name = var.rg_name
+  sql_database_name = var.sql_database_name
+  sql_server_name = var.sql_server_name
+  storage_account_name = var.storage_account_name
+  #module specific parameters
+  edition                          = "Basic"
+  firewall_ip_address              = {
+    "client" = data.http.example.body,
+    "internet" = "0.0.0.0",
+  }
 }
 
 output "db_name" {

@@ -2,6 +2,8 @@ package test
 
 import (
 	"fmt"
+	"github.com/gruntwork-io/terratest/modules/random"
+	"strings"
 	"testing"
 	"time"
 
@@ -9,17 +11,22 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestSQLbasic(t *testing.T) {
-	t.Parallel()
+func test(t *testing.T, directory string) {
+	x := random.UniqueId()
+	x = strings.ToLower(x)
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../test/basic_sql",
+		TerraformDir: directory,
 
-		Vars: map[string]interface{}{},
+		Vars: map[string]interface{}{
+			"rg_name":	x,
+			"sql_database_name": x,
+			"sql_server_name": x,
+			"storage_account_name": x,
+		},
 	}
 
 	defer terraform.Destroy(t, terraformOptions)
-
 	terraform.InitAndApply(t, terraformOptions)
 
 	var dbConfig DBConfig
@@ -73,32 +80,17 @@ func TestSQLbasic(t *testing.T) {
 
 		return "", nil
 	})
+
 }
 
-/* func TestSQLadvanced(t *testing.T) {
+func TestSQLBasic(t *testing.T) {
 	t.Parallel()
+	test(t, "./basic_sql")
 
-	terraformOptions := &terraform.Options{
-		TerraformDir: "../test/advanced_sql",
+}
 
-		Vars: map[string]interface{}{},
-	}
-
-	defer terraform.Destroy(t, terraformOptions)
-
-	terraform.InitAndApply(t, terraformOptions)
-} */
-
-/* func TestDataWareHouse(t *testing.T) {
+func TestSQLAdvanced(t *testing.T) {
 	t.Parallel()
+	test(t, "./advanced_sql")
 
-	terraformOptions := &terraform.Options{
-		TerraformDir: "../test/datawarehouse",
-
-		Vars: map[string]interface{}{},
-	}
-
-	defer terraform.Destroy(t, terraformOptions)
-
-	terraform.InitAndApply(t, terraformOptions)
-} */
+}

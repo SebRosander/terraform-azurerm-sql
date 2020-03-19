@@ -47,6 +47,13 @@ variable "sql_server_secondary_location" {
   default = "northeurope"
 }
 
+# azurerm_sql_firewall_rule
+variable "firewall_ip_address" {
+  description = "Map of the names of the rules and the IP addresses to allow through the firewall"
+  type = map(string)
+  default = {}
+}
+
 # azurerm_sql_active_directory_administrator
 variable "ada" {
   description = "Allows you to set a user or group as the AD administrator for an Azure SQL server"
@@ -149,6 +156,16 @@ variable "read_scale" {
   type = string
   default = null
 }
+variable "zone_redundant" {
+  description = "Whether or not this database is zone redundant, which means the replicas of this database will be spread across multiple availability zones."
+  type = bool
+  default = false
+}
+variable "sql_database_tags" {
+  description = "A mapping of tags to assign to the resource."
+  type = map(string)
+  default = {}
+}
 ## azurerm_sql_database.sql || threath_detection_policy 
 
 variable "retention_days" {
@@ -171,6 +188,11 @@ variable "account_replication_type" {
   description = "Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS and ZRS."
   type = string
   default = "LRS"  
+}
+variable "storage_account_tags" {
+  description = "A mapping of tags to assign to the resource."
+  type = map(string)
+  default = {}
 }
 
 # azurerm_storage_account_network_rules.rules
