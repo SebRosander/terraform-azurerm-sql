@@ -16,9 +16,6 @@ output "sql_fully_qualified_domain_name" {
 output "sql_identity" {
   value = var.identity == true ? azurerm_sql_server.primary.identity : null
 }
-output "sql_default_secondary_location" {
-  value = azurerm_sql_database.sql.default_secondary_location
-}
 output "sql_admin_username"{
   value       = azurerm_sql_server.primary.administrator_login
   sensitive   = true
@@ -41,6 +38,9 @@ output "db_name" {
 }
 output "db_creation_date" {
   value = azurerm_sql_database.sql.creation_date
+}
+output "sql_default_secondary_location" {
+  value = azurerm_sql_database.sql.default_secondary_location
 }
 
 # Blob outputs

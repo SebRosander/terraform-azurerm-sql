@@ -19,10 +19,10 @@ func test(t *testing.T, directory string) {
 		TerraformDir: directory,
 
 		Vars: map[string]interface{}{
-			"rg_name":	x,
-			"sql_database_name": x,
-			"sql_server_name": x,
-			"storage_account_name": x,
+			"rg_name":	fmt.Sprintf("resource-group-%s", x),
+			"sql_database_name": fmt.Sprintf("dbname-%s", x),
+			"sql_server_name": fmt.Sprintf("server-name-%s", x),
+			"storage_account_name": fmt.Sprintf("storageaccount%s", x),
 		},
 	}
 
@@ -92,5 +92,9 @@ func TestSQLBasic(t *testing.T) {
 func TestSQLAdvanced(t *testing.T) {
 	t.Parallel()
 	test(t, "./advanced_sql")
+}
 
+func TestSQLDatawarehouse(t *testing.T) {
+	t.Parallel()
+	test(t, "./datawarehouse")
 }

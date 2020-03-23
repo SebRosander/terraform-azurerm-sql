@@ -174,7 +174,7 @@ resource "azurerm_sql_database" "sql" {
       storage_endpoint              = azurerm_storage_account.sa.primary_blob_endpoint
       use_server_default            = var.use_server_default
     }
-  tags                              = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"} var.sql_database_tag)
+  tags                              = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"}, var.sql_database_tags)
 }
 
 resource "azurerm_storage_account" "sa" {
@@ -185,7 +185,7 @@ resource "azurerm_storage_account" "sa" {
   account_tier                      = "Standard"
   account_replication_type          = var.account_replication_type
   enable_https_traffic_only         = true
-  tags                              = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"} var.storage_account_tags)
+  tags                              = merge({"Created by":"Sebrosander", "Github":"https://github.com/SebRosander", "SQL":"Module"}, var.storage_account_tags)
 }
 
 resource "azurerm_storage_container" "sc" {

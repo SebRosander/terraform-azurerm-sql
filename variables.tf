@@ -104,7 +104,7 @@ variable "subnet_id_secondary" {
 
 # azurerm_sql_database.sql 
 variable "sql_database_name" {
-  description = ""
+  description = "A list of the names of the databases."
   type = string
 }
 variable "create_mode" {
@@ -166,8 +166,6 @@ variable "sql_database_tags" {
   type = map(string)
   default = {}
 }
-## azurerm_sql_database.sql || threath_detection_policy 
-
 variable "retention_days" {
   description = "Specifies the number of days to keep audit logs."
   type = number

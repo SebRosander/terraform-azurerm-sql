@@ -1,3 +1,4 @@
 # SQL - Module
-* Run tests --> advanced and datawarehouse
+* Docker Image
+* Travis CI
 * Remake README 

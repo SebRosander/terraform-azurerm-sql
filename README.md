@@ -1,6 +1,6 @@
 ## Azure SQL Module ##  
 
-This repo contains a Module to deploy a SQL Server, aswell as a SQL Database on Azure using Terraform.
+This repo contains a Module to deploy a SQL Server, as well as a SQL Database on Azure using Terraform.
 
 ### **Latest testrun:**  
 

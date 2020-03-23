@@ -1,3 +1,15 @@
+variable "rg_name" {
+  type = string
+}
+variable "sql_database_name" {
+  type = string
+}
+variable "sql_server_name" {
+  type = string
+}
+variable "storage_account_name" {
+  type = string
+}
 # Test Specific
 variable "edition" {
   description = "The edition of the database to be created. Valid values are: Basic, Standard, Premium, DataWarehouse, Business, BusinessCritical, Free, GeneralPurpose, Hyperscale, Premium, PremiumRS, Standard, Stretch, System, System2, or Web."
