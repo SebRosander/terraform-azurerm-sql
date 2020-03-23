@@ -20,5 +20,5 @@ override.tf.json
 *.idea
 
 # Go vendor directory
-./vendor/
+**/vendor/*
 
