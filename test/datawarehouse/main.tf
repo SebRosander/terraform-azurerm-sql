@@ -16,6 +16,7 @@ module "SQL" {
   requested_service_objective_name = var.requested_service_objective_name
   firewall_ip_address              = {
     "client" = data.http.example.body,
+    "internet" = "0.0.0.0",
   }
 }
 
