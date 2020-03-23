@@ -48,8 +48,13 @@ variable "sql_server_secondary_location" {
 }
 
 # azurerm_sql_firewall_rule
+variable "firewall_name" {
+  description = ""
+  type = list(string)
+  default = []
+}
 variable "firewall_ip_address" {
-  description = "Map of the names of the rules and the IP addresses to allow through the firewall"
+  description = "Map of the IP addresses to allow through the firewall. Key = Start IP, Value = End IP"
   type = map(string)
   default = {}
 }

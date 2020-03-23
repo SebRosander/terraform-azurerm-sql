@@ -14,8 +14,7 @@ module "SQL" {
   failover                         = true
   identity                         = true
   firewall_ip_address              = {
-    "client" = data.http.example.body,
-    "internet" = "0.0.0.0",
+    "0.0.0.0" : "255.255.255.255",
   }
 }
 

@@ -1,6 +1,3 @@
-data "http" "example" {
-  url = "https://api.ipify.org"
-}
 module "SQL" {
   source = "../../"
   rg_name = var.rg_name
@@ -10,8 +7,7 @@ module "SQL" {
   #module specific parameters
   edition                          = "Basic"
   firewall_ip_address              = {
-    "client" = data.http.example.body,
-    "internet" = "0.0.0.0",
+    "0.0.0.0" = "255.255.255.255",
   }
 }
 

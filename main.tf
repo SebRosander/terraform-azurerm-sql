@@ -54,7 +54,7 @@ resource "azurerm_sql_firewall_rule" "firewall_primary" {
   name                         = each.key
   resource_group_name          = azurerm_resource_group.rg.name
   server_name                  = azurerm_sql_server.primary.name
-  start_ip_address             = each.value
+  start_ip_address             = each.key
   end_ip_address               = each.value
 }
 
@@ -63,7 +63,7 @@ resource "azurerm_sql_firewall_rule" "firewall_secondary" {
   name                         = each.key
   resource_group_name          = azurerm_resource_group.rg.name
   server_name                  = azurerm_sql_server.secondary.0.name
-  start_ip_address             = each.value
+  start_ip_address             = each.key
   end_ip_address               = each.value
 }
 
