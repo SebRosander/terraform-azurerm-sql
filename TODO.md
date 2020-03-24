@@ -1,2 +1,0 @@
-# SQL - Module
-* Remake README 

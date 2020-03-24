@@ -42,74 +42,26 @@ variable "failover" {
   default = false
 }
 variable "sql_server_secondary_location" {
-  description = "Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created."
+  description = "Secondary location for SQL Server. Can't be the same location as primary server. Changing this forces a new resource to be created."
   type = string
   default = "northeurope"
 }
 
-# azurerm_sql_firewall_rule
-variable "firewall_name" {
-  description = ""
-  type = list(string)
-  default = []
+# azurerm_sql_failover_group.failover
+variable "failover_mode" {
+  description = "The failover mode. Possible values are Manual, Automatic."
+  type = string
+  default = "Automatic"
 }
-variable "firewall_ip_address" {
-  description = "Map of the IP addresses to allow through the firewall. Key = Start IP, Value = End IP"
-  type = map(string)
-  default = {}
+variable "grace_minutes" {
+  description = "Applies only if mode is Automatic. The grace period in minutes before failover with data loss is attempted."
+  type = number
+  default = 60
 }
 
-# azurerm_sql_active_directory_administrator
-variable "ada" {
-  description = "Allows you to set a user or group as the AD administrator for an Azure SQL server"
-  type = bool
-  default = false
-}
-variable "ada_login" {
-  description = "The login name of the principal to set as the server administrator"
-  type = string
-  default = null
-}
-
-# azurerm_mssql_server_security_alert_policy.sap
-variable "disabled_alerts" {
-  description = "Specifies an array of alerts that are disabled. Allowed values are: Sql_Injection, Sql_Injection_Vulnerability, Access_Anomaly, Data_Exfiltration, Unsafe_Action."
-  type = list(any)
-  default = []
-}
-
-# azurerm_sql_virtual_network_rule.sqlvnetrule_primary
-variable "vnet_enabled" {
-  description = "Do you want to place your sql server/servers within a vnet?"
-  type = bool
-  default = false
-}
-variable "sql_vnet_rule_primary_name" {
-  description = "The name of the primary SQL virtual network rule. Changing this forces a new resource to be created. Cannot be empty and must only contain alphanumeric characters and hyphens. Cannot start with a number, and cannot start or end with a hyphen."
-  type = string
-  default = null
-}
-variable "subnet_id_primary" {
-  description = "The ID of the subnet that the primary SQL server will be connected to."
-  type = string
-  default = null
-}
-
-# azurerm_sql_virtual_network_rule.sql_vnet_rule_secondary
-variable "sql_vnet_rule_secondary_name" {
-  description = "The name of the secondary SQL virtual network rule. Changing this forces a new resource to be created. Cannot be empty and must only contain alphanumeric characters and hyphens. Cannot start with a number, and cannot start or end with a hyphen."
-  type = string
-  default = null
-}
-variable "subnet_id_secondary" {
-  description = "The ID of the subnet that the secondary SQL server will be connected to."
-  type = string
-  default = null
-}
-
-# azurerm_sql_database.sql 
+# azurerm_sql_database.sql
 variable "sql_database_name" {
-  description = "A list of the names of the databases."
+  description = "The name of the database."
   type = string
 }
 variable "create_mode" {
@@ -181,6 +133,62 @@ variable "use_server_default" {
   type = string
   default = null
 }
+
+# azurerm_sql_firewall_rule
+variable "firewall_ip_address" {
+  description = "Map of the IP addresses to allow through the firewall. Key = Start IP, Value = End IP"
+  type = map(string)
+  default = {}
+}
+
+# azurerm_sql_active_directory_administrator
+variable "ada" {
+  description = "Allows you to set a user or group as the AD administrator for an Azure SQL server"
+  type = bool
+  default = false
+}
+variable "ada_login" {
+  description = "The login name of the principal to set as the server administrator"
+  type = string
+  default = null
+}
+
+# azurerm_mssql_server_security_alert_policy.sap
+variable "disabled_alerts" {
+  description = "Specifies an array of alerts that are disabled. Allowed values are: Sql_Injection, Sql_Injection_Vulnerability, Access_Anomaly, Data_Exfiltration, Unsafe_Action."
+  type = list(any)
+  default = []
+}
+
+# azurerm_sql_virtual_network_rule.sqlvnetrule_primary
+variable "vnet_enabled" {
+  description = "Do you want to place your sql server/servers within a vnet?"
+  type = bool
+  default = false
+}
+variable "sql_vnet_rule_primary_name" {
+  description = "The name of the primary SQL virtual network rule. Changing this forces a new resource to be created. Cannot be empty and must only contain alphanumeric characters and hyphens. Cannot start with a number, and cannot start or end with a hyphen."
+  type = string
+  default = null
+}
+variable "subnet_id_primary" {
+  description = "The ID of the subnet that the primary SQL server will be connected to."
+  type = string
+  default = null
+}
+
+# azurerm_sql_virtual_network_rule.sql_vnet_rule_secondary
+variable "sql_vnet_rule_secondary_name" {
+  description = "The name of the secondary SQL virtual network rule. Changing this forces a new resource to be created. Cannot be empty and must only contain alphanumeric characters and hyphens. Cannot start with a number, and cannot start or end with a hyphen."
+  type = string
+  default = null
+}
+variable "subnet_id_secondary" {
+  description = "The ID of the subnet that the secondary SQL server will be connected to."
+  type = string
+  default = null
+}
+
 
 # azurerm_storage_account.sa
 variable "storage_account_name" {
