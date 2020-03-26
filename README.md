@@ -9,7 +9,7 @@ The module has the possibility to create a fail-over group and a creation of a g
  
 ```
 module "sql" {  
-  source                = ""
+  source                = "sebrosander/terraform-azurerm-sql"
   rg_name               = ""
   sql_database_name     = ""
   sql_server_name       = ""
