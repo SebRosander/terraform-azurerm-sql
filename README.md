@@ -1,4 +1,4 @@
-## Azure SQL Module ##  
+## Azure SQL Module
 
 This repo contains a Module to deploy a SQL Server, SQL Database, Storage Account in a Resource Group on Azure using Terraform.
 The module has the possibility to create a fail-over group and a creation of a geo-redundant database for high availability needs.   
@@ -10,6 +10,7 @@ The module has the possibility to create a fail-over group and a creation of a g
 ```
 module "sql" {  
   source                = "sebrosander/terraform-azurerm-sql"
+  version               = "x.x.x"
   rg_name               = ""
   sql_database_name     = ""
   sql_server_name       = ""
